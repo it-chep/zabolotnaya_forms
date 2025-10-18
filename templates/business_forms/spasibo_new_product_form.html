@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_styles %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% endblock %}
+
+{% block title %}
+    Спасибо !
+{% endblock %}
+
+{% block extra_links %}
+    <link rel="stylesheet" href="{% static "css/spasibo_medbloger.css" %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="header_image_container">
+            <img src="{{ business_form_settings.spasibo_photo.url }}">
+        </div>
+        <div class="inline_container">
+            <div class="description_container_header_cap"></div>
+            <div class="">
+                Спасибо за честные ответы! Напишите мне в тг <a href="https://t.me/baymukanov" target="_blank">https://t.me/baymukanov</a>
+                слово ИНТЕРВЬЮ, если хочешь забрать бонусную лекцию побыстрее 😇
+            </div>
+        </div>
+    </div>
+{% endblock %}
