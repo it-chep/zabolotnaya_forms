@@ -1,31 +1,4 @@
 $(document).ready(function () {
-    const today = new Date();
-    const hundredYearsAgo = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate());
-
-    $('.datepicker').datepicker({
-        format: 'dd.mm.yyyy',
-        language: 'ru',
-        autoclose: true,
-        todayHighlight: true,
-        endDate: today,
-        startDate: hundredYearsAgo
-    });
-
-    $('#id_birth_date').on('input', function (e) {
-        var input = $(this).val();
-        input = input.replace(/[^0-9.]/g, '');
-        if (input.length >= 2 && input.charAt(2) !== '.') {
-            input = input.slice(0, 2) + '.' + input.slice(2);
-        }
-        if (input.length >= 5 && input.charAt(5) !== '.') {
-            input = input.slice(0, 5) + '.' + input.slice(5);
-        }
-        if (input.length > 10) {
-            input = input.slice(0, 10);
-        }
-        $(this).val(input);
-    });
-
     $('.input_container input').each(function () {
         const $fieldInputContainer = $(this).closest('.field_inline_item_container');
         const $line = $(this).closest('.input_container').find('.line')
@@ -65,49 +38,114 @@ $(document).ready(function () {
         $fieldWarningContainer.css('display', 'none');
     });
 
-    // Обработчик для кнопки отправки
-    $('.submit_button').on('click', function (e) {
+
+    // Обработчик ввода текста в поле "Другое"
+    $('.another-input').on('input', function () {
+        const $checkbox = $(this).closest('.many-checkbox-button').find('input[type="checkbox"]');
+        const $fieldContainer = $(this).closest('.field_inline_item_container');
+
+        if ($(this).val().trim()) {
+            $checkbox.prop('checked', true);
+            $fieldContainer.removeClass('invalid')
+                .find('.field_item_warning_container').hide();
+        }
+    });
+
+
+// Обработчик изменения самого инпута
+    $('.submit_button').click(function (e) {
         e.preventDefault();
 
         const $button = $(this);
-        const $form = $('form');
 
         $button.css({'opacity': '0.7', 'pointer-events': 'none'});
         $button.find('.submit_text').text('Отправка...');
 
         let isValid = true;
-        $form.find('[required]').each(function () {
-            const $field = $(this);
-            const $container = $field.closest('.field_inline_item_container');
+        const formData = $('form').serializeArray();
+        const formDataObj = {};
 
-            if (!$field.val() || ($field.is(':checkbox') && !$field.is(':checked'))) {
-                $container.addClass('invalid');
-                $container.find('.field_item_warning_container').show();
+        $('.many-checkbox-button').each(function () {
+            const $filed = $(this);
+            const fieldName = $filed.find('.many-checkbox-button__input').attr('name')
+            const $checkbox = $filed.find('input[type="checkbox"]');
+            const val = $filed.val().trim();
+            if (val === 'on') {
+                return
+            }
+            if ($checkbox.prop('checked') && val) {
+                formData.push({name: fieldName, value: val})
+            }
+        })
+
+        let has_bought_products = []
+        // Конвертируем formData в объект
+        $.each(formData, function (i, field) {
+            if (field.name === 'has_bought_products') {
+                has_bought_products.push(field.value)
+                return
+            }
+
+            formDataObj[field.name] = field.value;
+        });
+
+        formDataObj['has_bought_products'] = JSON.stringify(has_bought_products);
+
+        console.log('formDataObj', formDataObj,)
+        // Проверка обязательных полей
+        $('form input[required]').each(function () {
+            const $field = $(this);
+            const $fieldInputContainer = $field.closest('.field_inline_item_container');
+            const $line = $field.closest('.input_container').find('.line');
+            const $fieldWarningContainer = $fieldInputContainer.find('.field_item_warning_container');
+            // Обычная проверка для других полей
+            if (!$field.val() && $field.prop('required')) {
+                $fieldInputContainer.addClass('invalid');
+                $line.addClass('invalid');
+                $fieldWarningContainer.css('display', 'block');
                 isValid = false;
+            } else {
+                $fieldInputContainer.removeClass('invalid');
+                $line.removeClass('invalid');
+                $fieldWarningContainer.css('display', 'none');
             }
         });
 
+
         if (!isValid) {
             resetButtonState($button);
-            return;
+            return false;
         }
 
         $.ajax({
             type: 'POST',
-            url: $form.attr('action'),
-            data: $form.serialize(),
+            url: $('form').attr('action'),
+            data: formDataObj,
             dataType: 'json',
             success: function (response) {
-                console.log('Ответ сервера:', response);
                 if (response.success) {
                     window.location.href = response.redirect_url;
                 } else {
-                    showErrors(response.errors);
+                    $.each(response.errors, function (field, errors) {
+                        const $field = $('[name=' + field + ']');
+                        const $fieldInputContainer = $field.closest('.field_inline_item_container');
+                        const $fieldWarningContainer = $fieldInputContainer.find('.field_item_warning_container');
+                        $fieldInputContainer.addClass('invalid');
+                        $fieldWarningContainer.html(errors.join('<br>')).css('display', 'block');
+                    });
+
+                    if (Object.keys(response.errors).length > 0) {
+                        const firstErrorField = Object.keys(response.errors)[0];
+                        const $firstErrorElement = $('[name=' + firstErrorField + ']');
+                        $('html, body').animate({
+                            scrollTop: $firstErrorElement.offset().top - 100
+                        }, 500);
+                    }
                     resetButtonState($button);
                 }
             },
-            error: function (xhr) {
-                console.error('Ошибка запроса:', xhr.responseText);
+            error: function (xhr, status, error) {
+                console.error('Ошибка при отправке формы:', status, error);
                 resetButtonState($button);
             }
         });
@@ -119,28 +157,10 @@ $(document).ready(function () {
         $button.find('.submit_text').text('Отправить');
     }
 
-    // Показать ошибки
-    function showErrors(errors) {
-        if (!errors) return;
-
-        $('.field_item_warning_container').hide();
-
-        $.each(errors, function (fieldName, messages) {
-            const $field = $('[name="' + fieldName + '"]');
-            if ($field.length) {
-                const $container = $field.closest('.field_inline_item_container');
-                $container.addClass('invalid')
-                    .find('.field_item_warning_container')
-                    .html(messages.join('<br>'))
-                    .show();
-            }
-        });
-    }
-
-    // Обработчик для очистки формы
     $('.clear_inline_container').click(function () {
         $('form')[0].reset();
-        $('.field_inline_item_container').removeClass('invalid');
-        $('.field_item_warning_container').hide();
+        $('.input_container').removeClass('invalid');
+        $('input[name="radio-group"]').prop('checked', false);
+        $('#id_have_bought_products').prop('disabled', false);
     });
 });

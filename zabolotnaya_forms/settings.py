@@ -45,7 +45,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'baymukanov_forms.urls'
+ROOT_URLCONF = 'zabolotnaya_forms.urls'
 
 TEMPLATES = [
     {
@@ -64,7 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'baymukanov_forms.wsgi.application'
+WSGI_APPLICATION = 'zabolotnaya_forms.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

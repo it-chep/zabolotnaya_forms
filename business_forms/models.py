@@ -37,8 +37,8 @@ class BusinessForm(models.Model):
         verbose_name = "Конфигурации форм"
         verbose_name_plural = "Конфигурации форм"
 
-class NewProduct(models.Model):
 
+class NewProduct(models.Model):
     SOURCE_CHOICES = [
         ('telegram', 'Телеграм'),
         ('instagram', 'Инстаграм (запрещен в РФ)'),
@@ -107,11 +107,26 @@ class NewProduct(models.Model):
     BOUGHT_PRODUCTS_CHOICES = [
         ('yes', 'Да'),
         ('no', 'Нет'),
+        ('another', 'У других докторов в соцсетях')
     ]
     bought_products = models.CharField(
-        max_length=3,
+        max_length=100,
         choices=BOUGHT_PRODUCTS_CHOICES,
         verbose_name='Покупали ли вы какие-то образовательные продукты у докторов в соцсетях (НЕ консультации)?'
+    )
+
+    HAS_BOUGHT_PRODUCTS_CHOICES = [
+        ('consultation', 'да, онлайн-консультация'),
+        ('webinar', 'да, вебинар'),
+        ('appointment', 'да, очный прием'),
+        ('chat', 'да, чат с врачом'),
+        ('none', 'нет'),
+    ]
+
+    # множественный выбор
+    has_bought_products = models.CharField(
+        max_length=200,
+        verbose_name='Приобретали ли вы какие-то услуги у меня?', blank=True, null=True,
     )
 
     products_details = models.TextField(
@@ -140,7 +155,7 @@ class NewProduct(models.Model):
     telegram = models.CharField(
         max_length=100,
         blank=True,
-        verbose_name='Ссылка на ваш личный телеграм (не канал) в формате https://t.me/abaymukanov или через @'
+        verbose_name='Ссылка на ваш личный телеграм (не канал) в формате https://t.me/SvetlananeiroMsk или через @'
     )
 
     policy_agreement = models.BooleanField(

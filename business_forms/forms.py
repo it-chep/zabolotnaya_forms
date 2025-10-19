@@ -17,6 +17,7 @@ class NewProductForm(forms.ModelForm):
             'income',
             'bought_products',
             'products_details',
+            'has_bought_products',
             'full_name',
             'city',
             'phone',
@@ -41,6 +42,7 @@ class NewProductForm(forms.ModelForm):
             'products_details': forms.TextInput(attrs={
                 'placeholder': 'Мой ответ'
             }),
+            'has_bought_products': forms.CheckboxSelectMultiple,
             'full_name': forms.TextInput(attrs={
                 'placeholder': 'Мой ответ'
             }),
@@ -88,3 +90,4 @@ class NewProductForm(forms.ModelForm):
         self.fields['health_satisfaction'].choices = list(NewProduct.HEALTH_SATISFACTION_CHOICES)
         self.fields['source'].choices = list(NewProduct.SOURCE_CHOICES)
         self.fields['age'].choices = list(NewProduct.AGE_CHOICES)
+        self.fields['has_bought_products'].choices = list(NewProduct.HAS_BOUGHT_PRODUCTS_CHOICES)

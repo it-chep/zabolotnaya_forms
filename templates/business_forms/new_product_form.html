@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="description_container_header_body" dir="auto">
-                        Здравствуйте, меня зовут Азамат Маратович Баймуканов, врач-кардиолог, кандидат медицинских наук.
+                        Здравствуйте, меня зовут Светлана Заболотная, врач-невролог.
                         Вы очень поможете, если ответите на вопросы в анкете. Опрос анонимный.
                         Вопросы касаются вашего здоровья. Благодаря ответам я смогу сделать продукт, который поможет ВАМ
                         и сотням человек
@@ -54,12 +54,11 @@
                                     <div class="field_item_label">
                                         <div class="field_item_label_text">
                                             <b>ПОДАРОК ДЛЯ ТЕХ, КТО ДОШЁЛ ДО ЭТОГО ВОПРОСА!</b>
-                                            <br>
-                                            Оставьте свои контактные данные, если хотите со мной <b>созвониться на 30
-                                            минут.</b> Я проведу мини-интервью, задам более детальные вопросы, в свою
-                                            очередь подарю вам <b>лекцию
-                                            на
-                                            выбор по умным смарт-часам или по артериальному давлению.</b>
+                                            Оставьте свои контактные данные, если хотите со мной <b>созвониться на
+                                            30</b>
+                                            минут. Я проведу мини-интервью, задам более детальные вопросы, в свою
+                                            очередь подарю вам <b>лекцию на выбор про профилактику мигрени или на тему
+                                            «мигрень и беременность: от подготовки до лактации»</b>
                                         </div>
                                     </div>
                                 </div>
@@ -116,6 +115,21 @@
                                                             </label>
                                                         </div>
                                                     </div>
+                                                {% elif field.name == "has_bought_products" %}
+                                                    {% for value, label in field.field.choices %}
+                                                        <div class="many-checkbox-button">
+                                                            <input type="checkbox" class="many-checkbox-button__input"
+                                                                   id="{{ field.name }}_{{ value }}"
+                                                                   name="{{ field.name }}" value="{{ value }}"
+                                                                   {% if field.value == value %}checked{% endif %}>
+
+                                                            <label class="many-checkbox-button__label"
+                                                                   for="{{ field.name }}_{{ value }}">
+                                                                <span class="many-checkbox-button__custom"></span>
+                                                                {{ label }}
+                                                            </label>
+                                                        </div>
+                                                    {% endfor %}
                                                 {% else %}
                                                     {{ field }}
                                                 {% endif %}
