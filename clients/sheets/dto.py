@@ -38,5 +38,5 @@ class NewProductData:
             phone=model_instance.phone,
             telegram=model_instance.telegram,
             policy_agreement=model_instance.policy_agreement,
-            has_bought_products=model_instance.has_bought_products,
+            has_bought_products=model_instance.get_has_bought_products_display(),
         )

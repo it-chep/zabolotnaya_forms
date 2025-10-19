@@ -173,3 +173,22 @@ class NewProduct(models.Model):
 
     def __str__(self):
         return f"Анкета от {self.full_name or 'аноним'}"
+
+    def get_has_bought_products_display(self):
+        if self.has_bought_products:
+            # Преобразуем строку в список, убирая квадратные скобки и кавычки
+            products_str = self.has_bought_products.strip("[]'\"")
+            products_list = [product.strip().strip("'\"") for product in products_str.split(',')]
+
+            # Создаем словарь для быстрого поиска русских названий
+            choices_dict = dict(self.HAS_BOUGHT_PRODUCTS_CHOICES)
+
+            # Получаем русские названия для каждого продукта
+            display_names = []
+            for product in products_list:
+                if product in choices_dict:
+                    display_names.append(choices_dict[product])
+
+            return ',\n '.join(display_names)
+
+        return 'нет'
