@@ -19,7 +19,7 @@ class SpreadsheetClient:
         self.product_id = settings.SPREADSHEET_PRODUCT_ID
 
     def create_product_row(self, data: NewProductData):
-        sheet = self.client.open_by_key(self.product_id).worksheet("Лист 1")
+        sheet = self.client.open_by_key(self.product_id).worksheet("Лист1")
         sheet.append_row(
             [
                 f'{datetime.datetime.now()}',
