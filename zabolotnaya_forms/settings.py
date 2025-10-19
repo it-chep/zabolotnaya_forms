@@ -15,9 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
-CSRF_TRUSTED_ORIGINS = ['https://forms.baymukanov.ru', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://zabolotnaya.medblogers-base.ru', 'http://127.0.0.1']
 
-ALLOWED_HOSTS = ["forms.baymukanov.ru", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["zabolotnaya.medblogers-base.ru", "127.0.0.1", "localhost"]
 
 INSTALLED_APPS = [
     # GRAPPELLI ADMIN
