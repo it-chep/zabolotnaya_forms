@@ -19,7 +19,7 @@ class SpreadsheetClient:
         self.product_id = settings.SPREADSHEET_PRODUCT_ID
 
     def create_product_row(self, data: NewProductData):
-        sheet = self.client.open_by_key(self.product_id).worksheet("Ответы")
+        sheet = self.client.open_by_key(self.product_id).worksheet("Лист 1")
         sheet.append_row(
             [
                 f'{datetime.datetime.now()}',
@@ -37,5 +37,6 @@ class SpreadsheetClient:
                 f'{data.phone}',
                 f'{data.telegram}',
                 f'{data.policy_agreement}',
+                f'{data.has_bought_products}'
             ]
         )

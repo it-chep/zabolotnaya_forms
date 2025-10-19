@@ -204,7 +204,7 @@ class TelegramBotClient:
             [
                 {
                     'text': '📊 Посмотреть таблицу',
-                    'url': 'https://docs.google.com/spreadsheets/d/1t2E4EeVU9ITPtA776zItYrELOELLp2ZjLxOhTFgKsOU/edit'
+                    'url': 'https://docs.google.com/spreadsheets/d/1-cj7RotPxk4ZcDfGcFTw5jbsCgzRWAoKFVNVLmP224g/edit?gid=0#gid=0'
                 }
             ]
         ]

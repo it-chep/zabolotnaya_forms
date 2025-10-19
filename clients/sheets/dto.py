@@ -18,6 +18,7 @@ class NewProductData:
     phone: Optional[str] = None
     telegram: Optional[str] = None
     policy_agreement: bool = False
+    has_bought_products: Optional[Literal["consultation", "webinar", "appointment", "chat", "none"]] = None
 
     @classmethod
     def from_model(cls, model_instance) -> "NewProductData":
@@ -37,4 +38,5 @@ class NewProductData:
             phone=model_instance.phone,
             telegram=model_instance.telegram,
             policy_agreement=model_instance.policy_agreement,
+            has_bought_products=model_instance.get_has_bought_products_display(),
         )
