@@ -112,7 +112,7 @@ class NewProduct(models.Model):
     bought_products = models.CharField(
         max_length=100,
         choices=BOUGHT_PRODUCTS_CHOICES,
-        verbose_name='Покупали ли вы какие-то образовательные продукты у докторов в соцсетях (НЕ консультации)?'
+        verbose_name='Покупали ли вы какие-то образовательные продукты у других докторов в соцсетях (НЕ консультации)?'
     )
 
     HAS_BOUGHT_PRODUCTS_CHOICES = [
